@@ -41,6 +41,15 @@
           "settings": {
             "share_label": "Share"
           }
+        },
+        "shipping_estimate": {
+          "type": "shipping_estimate",
+          "settings": {
+            "text": "Estimated delivery:",
+            "min_days": 3,
+            "max_days": 7,
+            "skip_weekends": true
+          }
         }
       },
       "block_order": [
@@ -50,6 +59,7 @@
         "variant_picker",
         "quantity_selector",
         "buy_buttons",
+        "shipping_estimate",
         "description",
         "share"
       ],
