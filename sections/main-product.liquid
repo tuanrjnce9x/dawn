@@ -15,6 +15,7 @@
   {{ 'component-slider.css' | asset_url | stylesheet_tag }}
   {{ 'component-rating.css' | asset_url | stylesheet_tag }}
   {{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
+  {{ 'component-shipping-estimate.css' | asset_url | stylesheet_tag }}
 
   {% unless product.has_only_default_variant %}
     {{ 'component-product-variant-picker.css' | asset_url | stylesheet_tag }}
@@ -41,6 +42,7 @@
 
   <script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'shipping-estimate.js' | asset_url }}" defer="defer"></script>
   {%- if product.quantity_price_breaks_configured? -%}
     <script src="{{ 'show-more.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'price-per-item.js' | asset_url }}" defer="defer"></script>
@@ -208,6 +210,42 @@
                     <span class="visually-hidden">{{ 'products.product.sku' | t }}:</span>
                     {{- product.selected_or_first_available_variant.sku -}}
                   </p>
+                {%- when 'shipping_estimate' -%}
+                  <div class="product__shipping-estimate" {{ block.shopify_attributes }}>
+                    <shipping-estimate
+                      class="shipping-estimate"
+                      data-min-days="{{ block.settings.min_days }}"
+                      data-max-days="{{ block.settings.max_days }}"
+                      data-skip-weekends="{% if block.settings.skip_weekends %}true{% else %}false{% endif %}"
+                      data-locale="{{ request.locale.iso_code }}"
+                    >
+                      <p class="shipping-estimate__line">
+                        <span class="shipping-estimate__label">
+                          {%- if block.settings.text != blank -%}
+                            {{- block.settings.text | escape -}}
+                          {%- else -%}
+                            {{- 'products.product.shipping_estimate.default_text' | t -}}
+                          {%- endif -%}
+                        </span>
+                        <span class="shipping-estimate__dates"></span>
+                      </p>
+                      <button
+                        type="button"
+                        class="shipping-estimate__toggle"
+                        aria-expanded="false"
+                        aria-controls="ShippingEstimate-{{ block.id }}"
+                      >
+                        {{ 'products.product.shipping_estimate.details' | t }}
+                      </button>
+                      <div
+                        class="shipping-estimate__details"
+                        id="ShippingEstimate-{{ block.id }}"
+                        hidden
+                      >
+                        {{ 'products.product.shipping_estimate.details_note' | t }}
+                      </div>
+                    </shipping-estimate>
+                  </div>
                 {%- when 'custom_liquid' -%}
                   {{ block.settings.custom_liquid }}
                 {%- when 'collapsible_tab' -%}
@@ -825,6 +863,37 @@
           ],
           "default": "body",
           "label": "t:sections.main-product.blocks.sku.settings.text_style.label"
+        }
+      ]
+    },
+    {
+      "type": "shipping_estimate",
+      "name": "t:sections.main-product.blocks.shipping_estimate.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "default": "t:sections.main-product.blocks.shipping_estimate.settings.text.default",
+          "label": "t:sections.main-product.blocks.shipping_estimate.settings.text.label"
+        },
+        {
+          "type": "number",
+          "id": "min_days",
+          "default": 3,
+          "label": "t:sections.main-product.blocks.shipping_estimate.settings.min_days.label"
+        },
+        {
+          "type": "number",
+          "id": "max_days",
+          "default": 7,
+          "label": "t:sections.main-product.blocks.shipping_estimate.settings.max_days.label"
+        },
+        {
+          "type": "checkbox",
+          "id": "skip_weekends",
+          "default": true,
+          "label": "t:sections.main-product.blocks.shipping_estimate.settings.skip_weekends.label"
         }
       ]
     },

@@ -1,0 +1,44 @@
+.shipping-estimate {
+  display: block;
+}
+
+.shipping-estimate__line {
+  margin: 0;
+}
+
+.shipping-estimate__dates {
+  white-space: nowrap;
+}
+
+.shipping-estimate__toggle {
+  margin-top: 0.4rem;
+  padding: 0;
+  color: rgba(var(--color-link), var(--alpha-link));
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  text-decoration: underline;
+  text-underline-offset: 0.3rem;
+}
+
+.shipping-estimate__toggle:hover {
+  color: rgb(var(--color-link));
+}
+
+.shipping-estimate__details {
+  margin-top: 0.4rem;
+  color: rgba(var(--color-foreground), 0.75);
+  font-size: 1.2rem;
+}
+
+@media screen and (max-width: 749px) {
+  .shipping-estimate {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1rem 1.2rem;
+    background-color: rgba(var(--color-foreground), 0.04);
+    border-radius: var(--inputs-radius, 0.4rem);
+    font-size: 1.3rem;
+  }
+}

@@ -2032,6 +2032,24 @@
             }
           }
         },
+        "shipping_estimate": {
+          "name": "Shipping estimate",
+          "settings": {
+            "text": {
+              "label": "Text",
+              "default": "Estimated delivery:"
+            },
+            "min_days": {
+              "label": "Minimum days"
+            },
+            "max_days": {
+              "label": "Maximum days"
+            },
+            "skip_weekends": {
+              "label": "Skip weekends"
+            }
+          }
+        },
         "share": {
           "name": "Share",
           "settings": {
