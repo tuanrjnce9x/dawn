@@ -24,7 +24,7 @@ if (!customElements.get('shipping-estimate')) {
         if (!this.datesElement) return;
 
         const minDays = parseInt(this.dataset.minDays, 10) || 0;
-        const maxDays = parseInt(this.dataset.maxDays, 10) || minDays;
+        const maxDays = Math.max(parseInt(this.dataset.maxDays, 10) || minDays, minDays);
         const skipWeekends = this.dataset.skipWeekends === 'true';
         const locale = this.dataset.locale || document.documentElement.lang;
 
@@ -36,14 +36,18 @@ if (!customElements.get('shipping-estimate')) {
 
       addDays(date, days, skipWeekends) {
         const result = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-        result.setDate(result.getDate() + days);
-
-        if (skipWeekends) {
-          const day = result.getDay();
-          if (day === 6) result.setDate(result.getDate() + 2);
-          else if (day === 0) result.setDate(result.getDate() + 1);
+        if (!skipWeekends) {
+          result.setDate(result.getDate() + days);
+          return result;
         }
 
+        // count business days: Saturdays and Sundays don't count toward the delivery window
+        let added = 0;
+        while (added < days) {
+          result.setDate(result.getDate() + 1);
+          const day = result.getDay();
+          if (day !== 0 && day !== 6) added++;
+        }
         return result;
       }
 
