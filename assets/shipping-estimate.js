@@ -23,8 +23,8 @@ if (!customElements.get('shipping-estimate')) {
       renderDates() {
         if (!this.datesElement) return;
 
-        const minDays = parseInt(this.dataset.minDays, 10) || 0;
-        const maxDays = parseInt(this.dataset.maxDays, 10) || minDays;
+        const minDays = Math.max(0, parseInt(this.dataset.minDays, 10) || 0);
+        const maxDays = Math.max(minDays, parseInt(this.dataset.maxDays, 10) || minDays);
         const skipWeekends = this.dataset.skipWeekends === 'true';
         const locale = this.dataset.locale || document.documentElement.lang;
 
@@ -36,12 +36,16 @@ if (!customElements.get('shipping-estimate')) {
 
       addDays(date, days, skipWeekends) {
         const result = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-        result.setDate(result.getDate() + days);
 
-        if (skipWeekends) {
-          const day = result.getDay();
-          if (day === 6) result.setDate(result.getDate() + 2);
-          else if (day === 0) result.setDate(result.getDate() + 1);
+        if (!skipWeekends) {
+          result.setDate(result.getDate() + days);
+          return result;
+        }
+
+        let remaining = days;
+        while (remaining > 0) {
+          result.setDate(result.getDate() + 1);
+          if (result.getDay() !== 0 && result.getDay() !== 6) remaining -= 1;
         }
 
         return result;
